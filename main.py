@@ -30,7 +30,7 @@ if not BOT_TOKEN:
 
 REQUIRED_CHANNELS = ["@richedfflike"]
 GROUP_JOIN_LINK = "https://t.me/richedfflikegroup"
-OWNER_ID = your tg user id (integer)    #Example: 8329778041
+OWNER_ID = 8329778041 (integer)    #Example: 8329778041
 OWNER_USERNAME = "@Richedhacker"
 
 bot = telebot.TeleBot(BOT_TOKEN)
@@ -273,7 +273,7 @@ def help_command(message):
             f"🆘 `/help` - Show this help menu\n\n"
             f"👑 *Owner Commands:*\n"
             f"📈 `/remain` - Show all users' usage & stats\n\n"
-            f"📞 *Support:* {OWNER_USERNAME}"
+            f"📞 *Support:* {Richedhacker}"
         )
         bot.reply_to(message, help_text, parse_mode="Markdown")
         return
