@@ -8,11 +8,11 @@ from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 from flask import Flask, request, jsonify
 import logging
 import sys
-# ╔══════════════════════════════════════════════════════════════════╗
-# ║  CREATOR: RICHEDHACKER
-# ║  TELEGRAN: https://t.me/+ql-hy7A7fRNmN2Zl
-# ║  PERSONAL TELEGRAM: https://t.me/BR06RICHED
-# ╚══════════════════════════════════════════════════════════════════╝
+# â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—
+# â•‘  CREATOR: TARIKUL ISLAM
+# â•‘  TELEGRAN: https://t.me/paglu_dev
+# â•‘  PERSONAL TELEGRAM: https://t.me/itzpaglu
+# â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 # Configure logging
 logging.basicConfig(
@@ -22,16 +22,16 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # === CONFIG ===
-BOT_TOKEN = os.getenv("8637116527:AAGnILLFD1xSnKyrPZIx62f0vljxp0ZGkSk")
+BOT_TOKEN = os.getenv("BOT_TOKEN")
 
 if not BOT_TOKEN:
-    logger.error("❌ BOT_TOKEN not found! Please set your bot token in environment variables.")
+    logger.error("âŒ BOT_TOKEN not found! Please set your bot token in environment variables.")
     sys.exit(1)
 
-REQUIRED_CHANNELS = ["@richedfflike"]
-GROUP_JOIN_LINK = "https://t.me/richedfflikegroup"
-OWNER_ID = 8329778041 (integer)    #Example: 8329778041
-OWNER_USERNAME = "@Richedhacker"
+REQUIRED_CHANNELS = ["@your channel username"]
+GROUP_JOIN_LINK = "https://t.me/your_group_link"
+OWNER_ID = your tg user id (integer)    #Example: 6282811167
+OWNER_USERNAME = "@your username"
 
 bot = telebot.TeleBot(BOT_TOKEN)
 like_tracker = {}   # in-memory cache
@@ -52,7 +52,7 @@ def reset_limits():
 
             time.sleep(sleep_seconds)
             like_tracker.clear()
-            logger.info("✅ Daily limits reset at 00:00 UTC (in-memory).")
+            logger.info("âœ… Daily limits reset at 00:00 UTC (in-memory).")
         except Exception as e:
             logger.error(f"Error in reset_limits thread: {e}")
 
@@ -76,7 +76,7 @@ def call_api(region, uid):
     try:
         response = requests.get(url, timeout=20)
         if response.status_code != 200:
-            return {"⚠️Invalid": " Maximum likes reached for today. Please try again tomorrow."}
+            return {"âš ï¸Invalid": " Maximum likes reached for today. Please try again tomorrow."}
         return response.json()
     except requests.exceptions.RequestException:
         return {"error": "API Failed. Please try again later."}
@@ -127,12 +127,12 @@ def start_command(message):
     if not is_user_in_channel(user_id):
         markup = InlineKeyboardMarkup()
         for channel in REQUIRED_CHANNELS:
-            markup.add(InlineKeyboardButton(f"🔗 Join {channel}", url=f"https://t.me/{channel.strip('@')}") )
-        bot.reply_to(message, "📢 Channel Membership Required\nTo use this bot, you must join all our channels first", reply_markup=markup, parse_mode="Markdown")
+            markup.add(InlineKeyboardButton(f"ðŸ”— Join {channel}", url=f"https://t.me/{channel.strip('@')}") )
+        bot.reply_to(message, "ðŸ“¢ Channel Membership Required\nTo use this bot, you must join all our channels first", reply_markup=markup, parse_mode="Markdown")
         return
     if user_id not in like_tracker:
         like_tracker[user_id] = {"used": 0, "last_used": datetime.now() - timedelta(days=1)}
-    bot.reply_to(message, "✅ You're verified! Use /like to send likes.", parse_mode="Markdown")
+    bot.reply_to(message, "âœ… You're verified! Use /like to send likes.", parse_mode="Markdown")
 
 
 @bot.message_handler(commands=['like'])
@@ -144,24 +144,24 @@ def handle_like(message):
     # Only allow in groups, not in private messages (except owner)
     if message.chat.type == "private" and message.from_user.id != OWNER_ID:
         markup = InlineKeyboardMarkup()
-        markup.add(InlineKeyboardButton("🔗 Join Official Group", url=GROUP_JOIN_LINK))
-        bot.reply_to(message, "❌ Sorry! command is not allowed here.\n\nJoin our official group:", reply_markup=markup)
+        markup.add(InlineKeyboardButton("ðŸ”— Join Official Group", url=GROUP_JOIN_LINK))
+        bot.reply_to(message, "âŒ Sorry! command is not allowed here.\n\nJoin our official group:", reply_markup=markup)
         return
 
     if not is_user_in_channel(user_id):
         markup = InlineKeyboardMarkup()
         for channel in REQUIRED_CHANNELS:
-            markup.add(InlineKeyboardButton(f"🔗 Join {channel}", url=f"https://t.me/{channel.strip('@')}") )
-        bot.reply_to(message, "❌ You must join all our channels to use this command.", reply_markup=markup, parse_mode="Markdown")
+            markup.add(InlineKeyboardButton(f"ðŸ”— Join {channel}", url=f"https://t.me/{channel.strip('@')}") )
+        bot.reply_to(message, "âŒ You must join all our channels to use this command.", reply_markup=markup, parse_mode="Markdown")
         return
 
     if len(args) != 3:
-        bot.reply_to(message, "❌ Format: `/like server_name uid`", parse_mode="Markdown")
+        bot.reply_to(message, "âŒ Format: `/like server_name uid`", parse_mode="Markdown")
         return
 
     region, uid = args[1], args[2]
     if not region.isalpha() or not uid.isdigit():
-        bot.reply_to(message, "⚠️ Invalid input. Use: `/like server_name uid`", parse_mode="Markdown")
+        bot.reply_to(message, "âš ï¸ Invalid input. Use: `/like server_name uid`", parse_mode="Markdown")
         return
 
     threading.Thread(target=process_like, args=(message, region, uid)).start()
@@ -180,10 +180,10 @@ def process_like(message, region, uid):
 
     max_limit = get_user_limit(user_id)
     if usage["used"] >= max_limit:
-        bot.reply_to(message, f"⚠️ You have exceeded your daily request limit!")
+        bot.reply_to(message, f"âš ï¸ You have exceeded your daily request limit!")
         return
 
-    processing_msg = bot.reply_to(message, "⏳ Please wait... Sending likes...")
+    processing_msg = bot.reply_to(message, "â³ Please wait... Sending likes...")
     response = call_api(region, uid)
 
     if "error" in response:
@@ -191,10 +191,10 @@ def process_like(message, region, uid):
             bot.edit_message_text(
                 chat_id=processing_msg.chat.id,
                 message_id=processing_msg.message_id,
-                text=f"⚠️ API Error: {response['error']}"
+                text=f"âš ï¸ API Error: {response['error']}"
             )
         except:
-            bot.reply_to(message, f"⚠️ API Error: {response['error']}")
+            bot.reply_to(message, f"âš ï¸ API Error: {response['error']}")
         return
 
     if not isinstance(response, dict) or response.get("status") != 1:
@@ -202,10 +202,10 @@ def process_like(message, region, uid):
             bot.edit_message_text(
                 chat_id=processing_msg.chat.id,
                 message_id=processing_msg.message_id,
-                text="❌ UID has already received its max amount of likes. Limit reached for today, try another UID or after 24 hrs."
+                text="âŒ UID has already received its max amount of likes. Limit reached for today, try another UID or after 24 hrs."
             )
         except:
-            bot.reply_to(message, "⚠️ Invalid UID or unable to fetch data.")
+            bot.reply_to(message, "âš ï¸ Invalid UID or unable to fetch data.")
         return
 
     try:
@@ -222,7 +222,7 @@ def process_like(message, region, uid):
         usage["last_used"] = now_utc
         like_tracker[user_id] = usage
         
-        response_text = f"""✅ *Request Processed Successfully*\n\n👤 *Name:* `{player_name}`\n🆔 *UID:* `{player_uid}`\n🌍 *Region:* `{region}`\n🤡 *Likes Before:* `{likes_before}`\n📈 *Likes Added:* `{likes_given}`\n🗿 *Total Likes Now:* `{total_like}`\n🔐 *Remaining Requests:* `{max_limit - usage['used']}`\n👑 *Credit:* @itzpaglu"""
+        response_text = f"""âœ… *Request Processed Successfully*\n\nðŸ‘¤ *Name:* `{player_name}`\nðŸ†” *UID:* `{player_uid}`\nðŸŒ *Region:* `{region}`\nðŸ¤¡ *Likes Before:* `{likes_before}`\nðŸ“ˆ *Likes Added:* `{likes_given}`\nðŸ—¿ *Total Likes Now:* `{total_like}`\nðŸ” *Remaining Requests:* `{max_limit - usage['used']}`\nðŸ‘‘ *Credit:* @itzpaglu"""
 
         markup = InlineKeyboardMarkup()
 
@@ -236,7 +236,7 @@ def process_like(message, region, uid):
 
     except Exception as e:
         logger.error(f"Error in process_like: {e}")
-        bot.reply_to(message, "⚠️ Something went wrong. Likes Send, I can't decode your info.")
+        bot.reply_to(message, "âš ï¸ Something went wrong. Likes Send, I can't decode your info.")
 
 
 @bot.message_handler(commands=["remain"])
@@ -248,15 +248,15 @@ def owner_commands(message):
     cmd = args[0].lower()
 
     if cmd == "/remain":
-        lines = ["📊 *Remaining Daily Requests Per User:*"]
+        lines = ["ðŸ“Š *Remaining Daily Requests Per User:*"]
         if not like_tracker:
-            lines.append("❌ No users have used the bot yet today.")
+            lines.append("âŒ No users have used the bot yet today.")
         else:
             for uid, usage in like_tracker.items():
                 limit = get_user_limit(uid)
                 used = usage.get("used", 0)
                 limit_str = "Unlimited" if limit > 1000 else str(limit)
-                lines.append(f"👤 `{uid}` ➜ {used}/{limit_str}")
+                lines.append(f"ðŸ‘¤ `{uid}` âžœ {used}/{limit_str}")
         bot.reply_to(message, "\n".join(lines), parse_mode="Markdown")
 
 
@@ -267,13 +267,13 @@ def help_command(message):
     # For owner, show owner commands directly
     if user_id == OWNER_ID:
         help_text = (
-            f"📖 *Bot Commands:*\n\n"
-            f"🧑‍💻 `/like <region> <uid>` - Send likes to Free Fire UID\n"
-            f"🔰 `/start` - Start or verify\n"
-            f"🆘 `/help` - Show this help menu\n\n"
-            f"👑 *Owner Commands:*\n"
-            f"📈 `/remain` - Show all users' usage & stats\n\n"
-            f"📞 *Support:* {Richedhacker}"
+            f"ðŸ“– *Bot Commands:*\n\n"
+            f"ðŸ§‘â€ðŸ’» `/like <region> <uid>` - Send likes to Free Fire UID\n"
+            f"ðŸ”° `/start` - Start or verify\n"
+            f"ðŸ†˜ `/help` - Show this help menu\n\n"
+            f"ðŸ‘‘ *Owner Commands:*\n"
+            f"ðŸ“ˆ `/remain` - Show all users' usage & stats\n\n"
+            f"ðŸ“ž *Support:* {OWNER_USERNAME}"
         )
         bot.reply_to(message, help_text, parse_mode="Markdown")
         return
@@ -282,18 +282,18 @@ def help_command(message):
     if not is_user_in_channel(user_id):
         markup = InlineKeyboardMarkup()
         for channel in REQUIRED_CHANNELS:
-            markup.add(InlineKeyboardButton(f"🔗 Join {channel}", url=f"https://t.me/{channel.strip('@')}") )
-        bot.reply_to(message, "❌ You must join all our channels to use this command.", reply_markup=markup, parse_mode="Markdown")
+            markup.add(InlineKeyboardButton(f"ðŸ”— Join {channel}", url=f"https://t.me/{channel.strip('@')}") )
+        bot.reply_to(message, "âŒ You must join all our channels to use this command.", reply_markup=markup, parse_mode="Markdown")
         return
 
     # Show regular user help
     help_text = (
-        f"📖 *Bot Commands:*\n\n"
-        f"🧑‍💻 `/like <region> <uid>` - Send likes to Free Fire UID\n"
-        f"🔰 `/start` - Start or verify\n"
-        f"🆘 `/help` - Show this help menu\n\n"
-        f"📞 *Support:* {@richedfflikegroup}\n"
-        f"🔗 Join our channels for updates!"
+        f"ðŸ“– *Bot Commands:*\n\n"
+        f"ðŸ§‘â€ðŸ’» `/like <region> <uid>` - Send likes to Free Fire UID\n"
+        f"ðŸ”° `/start` - Start or verify\n"
+        f"ðŸ†˜ `/help` - Show this help menu\n\n"
+        f"ðŸ“ž *Support:* {OWNER_USERNAME}\n"
+        f"ðŸ”— Join our channels for updates!"
     )
     bot.reply_to(message, help_text, parse_mode="Markdown")
 
@@ -307,12 +307,12 @@ def reply_all(message):
         return
 
 
-# ╔══════════════════════════════════════════════════════════════════╗
-# ║  ⚠️ PROTECTED SECTION - INTEGRITY VERIFIED AT RUNTIME           
-# ║  This section is multi-layer encrypted and tamper-protected.      
-# ║  Modification, decompilation, or redistribution is prohibited.
-# ║  PROTECTED BY TARIKUL ISLAM
-# ╚══════════════════════════════════════════════════════════════════╝
+# â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—
+# â•‘  âš ï¸ PROTECTED SECTION - INTEGRITY VERIFIED AT RUNTIME           
+# â•‘  This section is multi-layer encrypted and tamper-protected.      
+# â•‘  Modification, decompilation, or redistribution is prohibited.
+# â•‘  PROTECTED BY TARIKUL ISLAM
+# â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 import zlib as _qfwmbhsamfxvnt, base64 as __ukihtstkdtcuq
 exec(_qfwmbhsamfxvnt.decompress(__ukihtstkdtcuq.b85decode("".join([
     "c-nndS+k-@8hx){aV^CLZ7UQ3u|)wD7u*2_oM;gclvQO>LG-uJ?dqP0sXGyqFBy6ATTY(Lh&+~e",
